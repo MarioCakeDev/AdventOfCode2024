@@ -3,7 +3,7 @@ using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
 
-Console.WriteLine(new Day3().Part1());
+Console.WriteLine(new Day3().Part2());
 
 Console.WriteLine("Press any key to run benchmarks");
 Console.ReadLine();

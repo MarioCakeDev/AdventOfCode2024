@@ -74,6 +74,90 @@ public class Day3
     [Benchmark]
     public int Part2()
     {
-        return 0;
+        ReadOnlySpan<char> inputSpan = _input.AsSpan();
+        ReadOnlySpan<char> doString = "do()";
+        ReadOnlySpan<char> dontString = "don't()";
+
+        ReadOnlySpan<char> startSpan = inputSpan;
+        int sum = 0;
+        while (true)
+        {
+            int doEndIndex = startSpan.IndexOf(dontString);
+
+            ReadOnlySpan<char> enabledSpan = startSpan;
+            if(doEndIndex != -1)
+            {
+                enabledSpan = startSpan[..doEndIndex];
+            }
+
+            MemoryExtensions.SpanSplitEnumerator<char> multiplicationCandidates = enabledSpan.Split("mul(");
+
+            foreach (Range candidateRange in multiplicationCandidates)
+            {
+                ReadOnlySpan<char> candidate = enabledSpan[candidateRange];
+                int endOfMultiplication = candidate.IndexOf(')');
+
+                if (endOfMultiplication == -1)
+                {
+                    continue;
+                }
+
+                candidate = candidate[..endOfMultiplication];
+                int? firstNumber = null;
+
+                int firstNumberRange = 0;
+                foreach (char c in candidate)
+                {
+                    if (char.IsDigit(c))
+                    {
+                        firstNumberRange++;
+                        continue;
+                    }
+
+                    if (c == ',' && firstNumberRange > 0)
+                    {
+                        firstNumber = int.Parse(candidate[..firstNumberRange]);
+                    }
+
+                    break;
+                }
+
+                if (!firstNumber.HasValue)
+                {
+                    continue;
+                }
+
+                bool isNumber = true;
+                foreach (char c in candidate[(firstNumberRange + 1)..])
+                {
+                    if (!char.IsDigit(c))
+                    {
+                        isNumber = false;
+                        break;
+                    }
+                }
+
+                if (!isNumber)
+                {
+                    continue;
+                }
+
+                sum += firstNumber.Value * int.Parse(candidate[(firstNumberRange + 1)..]);
+            }
+
+            if (doEndIndex == -1)
+            {
+                return sum;
+            }
+
+            int doIndex = startSpan[doEndIndex..].IndexOf(doString);
+
+            if (doIndex == -1)
+            {
+                return sum;
+            }
+
+            startSpan = startSpan[(doEndIndex+doIndex)..];
+        }
     }
 }
