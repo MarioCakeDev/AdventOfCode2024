@@ -126,11 +126,10 @@ public class Day4
             int x = mIndex % columns;
             int y = mIndex / columns;
 
-            int bottomOffset = mIndex + rowOffset2;
             if (y < rowsEndOffset && x < columnsEndOffset &&
                 inputSpan[mIndex + 2] == 'M' &&
                 inputSpan[mIndex + 1 + rowOffset1] == 'A' &&
-                inputSpan[bottomOffset] == 'S' && inputSpan[bottomOffset + 2] == 'S'
+                inputSpan[mIndex + rowOffset2] == 'S' && inputSpan[mIndex + rowOffset2 + 2] == 'S'
                )
             {
                 sum++;
@@ -139,20 +138,17 @@ public class Day4
             if (y < rowsEndOffset && x < columnsEndOffset &&
                 inputSpan[mIndex + 2] == 'S' &&
                 inputSpan[mIndex + 1 + rowOffset1] == 'A' &&
-                inputSpan[bottomOffset] == 'M' && inputSpan[bottomOffset + 2] == 'S'
+                inputSpan[mIndex + rowOffset2] == 'M' && inputSpan[mIndex + rowOffset2 + 2] == 'S'
             )
             {
                 sum++;
             }
 
 
-            int middleLeft = mIndex - 1;
-            int middleBottomLeftOffset = middleLeft + rowOffset1;
-            int bottomLeftOffset = bottomOffset - 2;
             if (y < rowsEndOffset && x >= 2 &&
                 inputSpan[mIndex - 2] == 'S' &&
-                inputSpan[middleBottomLeftOffset] == 'A' &&
-                inputSpan[bottomOffset] == 'M' && inputSpan[bottomLeftOffset] == 'S'
+                inputSpan[mIndex - 1 + rowOffset1] == 'A' &&
+                inputSpan[mIndex + rowOffset2] == 'M' && inputSpan[mIndex + rowOffset2 - 2] == 'S'
             )
             {
                 sum++;
